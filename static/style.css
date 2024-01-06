@@ -1,0 +1,113 @@
+.icon-btn {
+  background: none;
+  border: none;
+  outline: none;
+  padding: 0px;
+  margin: 0px;
+  font-size: 20px;
+}
+
+.blue {
+  color: #007bff;
+}
+
+.red {
+  color: #dc3545;
+}
+
+.orange {
+  color: #ffc107;
+}
+
+.icon-btn:hover {
+  opacity: 0.8;
+}
+
+.greska {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.custom-progress-container {
+  width: 100%;
+  height: 50vh;
+}
+
+.custom-progress-bar {
+  height: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-align: center;
+}
+
+.elementi-sortiranje {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+}
+
+[contenteditable="true"] {
+  background-color: #f9f9f9;
+  border: 1px solid #ccc;
+  padding: 5px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+  /* outline: none; uklanja plavi obris u nekim pregledačima kada je element fokusiran */
+}
+
+.table input {
+  text-align: center;
+}
+
+.table {
+  text-align: center;
+}
+
+.btn-primary {
+  background: rgb(57, 90, 255);
+  background: radial-gradient(
+    circle,
+    rgba(57, 90, 255, 1) 0%,
+    rgba(0, 104, 182, 1) 100%
+  );
+  border-color: rgb(57, 90, 255);
+}
+
+.btn-warning {
+  background: rgb(255, 237, 117);
+  background: radial-gradient(
+    circle,
+    rgba(255, 237, 117, 1) 0%,
+    rgba(255, 201, 0, 1) 100%
+  );
+  border-color: rgb(255, 237, 117);
+  margin-right: 10px;
+}
+
+.btn-danger {
+  background: rgb(255, 98, 98);
+  background: radial-gradient(
+    circle,
+    rgba(255, 98, 98, 1) 0%,
+    rgba(226, 44, 44, 1) 100%
+  );
+  border-color: rgb(255, 99, 98);
+}
+
+.dugme-sortiraj {
+  /* margin-right: .2rem; */
+  margin-left: 1rem;
+  background-color: purple;
+}
+
+.sortDiv {
+  margin-bottom: 2rem;
+}

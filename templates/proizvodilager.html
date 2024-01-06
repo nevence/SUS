@@ -1,0 +1,101 @@
+{% extends 'base.html' %} {% block content%}
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+  <div class="container">
+    <a class="navbar-brand" href={{ url_for('skladista') }}>SUS</a>
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a id="skladiste-meni" class="nav-link" href={{ url_for('popunjenost') }}
+            >Popunjenost</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            id="proizvodilager-meni"
+            class="nav-link"
+            href={{ url_for('proizvodilager') }}
+            >Proizvodi na lageru</a
+          >
+        </li>
+        <li class="nav-item">
+          <a
+            id="opticajproizvoda-meni"
+            class="nav-link"
+            href={{ url_for('dostupniproizvodi') }}
+            >Proizvodi u opticaju</a
+          >
+        </li>
+        <li class="nav-item">
+          <a id="skladiste-meni" class="nav-link" href={{ url_for('users') }}
+            >Korisnici</a
+          >
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Glavni kontejner -->
+<div class="container">
+  <div class="row">
+    <!-- Drugi Idiv -->
+    <div class="col-md-12">
+      <div class="mb-3">
+        <h3>Proizvodi na lageru:</h3>
+      </div>
+      <div>
+        <!-- SortDiv -->
+        <div id="sortDiv-SkladisteProizvod" class="sortDiv"></div>
+        <!-- TabelDiv -->
+        <div id="tabelDiv-SkladisteProizvod" class="tabelDiv">
+          <table class="table table-striped text-center" id="skladisteproizvod-tabela">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Naziv</th>
+                <th>Kategorija</th>
+                <th>Cena</th>
+                <th>Kolicina</th>
+                <th>Akcije</th>
+              </tr>
+            </thead>
+            <tbody id="skladisteproizvod-telo">
+                <tr>
+            
+                    <td>1</td>
+                    <td>Laptop</td>
+                    <td>Elektronika</td>
+                    <td>79900</td>
+                    <td>15</td>
+                    <td class="d-inline-flex">
+                  
+                        <a class="btn btn-primary mb-2 ml-2" href={{ url_for('poruciproizvod') }} role="button">
+                            <!-- <i class=" form-inline fas fa-edit"></i> --> Poruči
+                          </a>
+                
+                          <a class="btn btn-primary mb-2 ml-2" href={{ url_for('isporuciproizvod') }} role="button">
+                            <!-- <i class=" form-inline fas fa-edit"></i> --> Isporuči
+                          </a>
+                    </td>
+                  </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block content%}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container">
+      <a class="navbar-brand" href={{ url_for('skladista') }}>SUS</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a id="skladiste-meni" class="nav-link" href={{ url_for('popunjenost') }}
+              >Popunjenost</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              id="proizvodilager-meni"
+              class="nav-link"
+              href={{ url_for('proizvodilager') }}
+              >Proizvodi na lageru</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              id="opticajproizvoda-meni"
+              class="nav-link"
+              href={{ url_for('dostupniproizvodi') }}
+              >Proizvodi u opticaju</a
+            >
+          </li>
+          <li class="nav-item">
+            <a id="skladiste-meni" class="nav-link" href={{ url_for('users') }}
+              >Korisnici</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+<div class="container">
+
+    <div class="row justify-content-end my-3">
+        <a class="btn btn-primary" href= {{ url_for('newuser') }} role="button">Dodaj korisnika</a>
+      </div>
+
+
+    <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col">Ime</th>
+            <th scope="col">Prezime</th>
+            <th scope="col">Email</th>
+            <th scope="col">Akcije</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            
+            <td>Slavimir</td>
+            <td>Stosovic</td>
+            <td>slavimir.stosovic@vtsnis.edu.rs</td>
+            <td class="d-inline-flex">
+          
+                <a class="icon-btn orange mb-2 ml-2" href={{ url_for('edituser') }} role="button">
+                    <i class=" form-inline fas fa-edit"></i>
+                  </a>
+        
+                  <form action="">
+                    <button class="form-inline icon-btn red mb-2 ml-2">
+                      <i class="fas fa-trash-alt "></i>
+                    </button>
+                  </form>
+            </td>
+          </tr>
+
+          
+        </tbody>
+      </table>
+</div>
+
+{% endblock %}

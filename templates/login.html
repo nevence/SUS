@@ -1,0 +1,40 @@
+{%extends 'base.html' %}
+{% block content %}
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container justify-content-center">
+      <a class="navbar-brand" href="#"
+        >SUS - Sistem za upravljanje skladištem</a
+      >
+    </div>
+  </nav>
+<div class='container'>
+    
+
+ <div class="row justify-content-center my-5">
+   <img src="/static/logo.png"/>
+ </div>
+  <div class="row justify-content-center">
+    <div class="col-lg-6 col-xs-12">
+
+      <form>
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email adresa</label>
+    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+    
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Lozinka</label>
+    <input type="password" class="form-control" id="exampleInputPassword1">
+  </div>
+  
+  <a class="btn btn-primary" href= {{ url_for('users') }} role="button">Prijavi se</a>
+</form>
+      
+    </div>
+  </div>
+  
+</div>
+
+
+{% endblock %}
