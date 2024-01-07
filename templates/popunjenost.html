@@ -1,52 +1,5 @@
 {% extends 'base.html' %} {% block content %}
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
-  <div class="container">
-    <a class="navbar-brand" href={{ url_for('skladista') }}>SUS</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-toggle="collapse"
-      data-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
-          <a id="skladiste-meni" class="nav-link" href={{ url_for('popunjenost') }}
-            >Popunjenost</a
-          >
-        </li>
-        <li class="nav-item">
-          <a
-            id="proizvodilager-meni"
-            class="nav-link"
-            href={{ url_for('proizvodilager') }}
-            >Proizvodi na lageru</a
-          >
-        </li>
-        <li class="nav-item">
-          <a
-            id="opticajproizvoda-meni"
-            class="nav-link"
-            href={{ url_for('dostupniproizvodi') }}
-            >Proizvodi u opticaju</a
-          >
-        </li>
-        <li class="nav-item">
-          <a id="skladiste-meni" class="nav-link" href={{ url_for('users') }}
-            >Korisnici</a
-          >
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
-
 <!-- Glavni kontejner -->
 <div class="container">
   <div class="row">
@@ -57,18 +10,18 @@
           class="naslov d-flex flex-column align-items-center justify-content-center"
         >
           <h2>Grafički prikaz popunjenosti kapaciteta skladišta:</h2>
-          <h4 id="naziv-skladista"></h4>
+          <h4 id="naziv-skladista">Gigatron Niš</h4>
         </div>
         <div class="parametri col-12">
           <div class="row justify-content-between">
             <div class="kapacitet d-flex col-4 justify-content-center">
-              <h5 id="kapacitet"></h5>
+              <h5 id="kapacitet">Kapacitet: 4900</h5>
             </div>
             <div class="popunjeno d-flex col-4 justify-content-center">
-              <h5 id="popunjeno"></h5>
+              <h5 id="popunjeno">Popunjeno: 1363</h5>
             </div>
             <div class="dostupno d-flex col-4 justify-content-center">
-              <h5 id="dostupno"></h5>
+              <h5 id="dostupno">Dostupno: 3537</h5>
             </div>
           </div>
         </div>
@@ -78,9 +31,9 @@
         <div class="custom-progress-container">
           <div class="progress custom-progress-bar">
             <div
-              class="progress-bar"
+              class="progress-bar bg-success"
               role="progressbar"
-              style="width: 0%"
+              style="width: 28%"
               aria-valuenow="50"
               aria-valuemin="0"
               aria-valuemax="100"
@@ -88,7 +41,7 @@
           </div>
         </div>
         <div class="procenat-popunjenosti d-flex justify-content-center">
-          <h2 class="" id="procenat-popunjenosti"></h2>
+          <h2 class="" id="procenat-popunjenosti">28%</h2>
         </div>
       </div>
     </div>

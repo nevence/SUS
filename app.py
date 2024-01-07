@@ -8,7 +8,7 @@ def index():#definisanje funkcije o ruti index
 
 @app.route('/login')
 def login():
-	return render_template('login.html')
+	return render_template('login.html', page='login')
 
 @app.route('/users')
 def users():
@@ -48,7 +48,7 @@ def isporuciproizvod():
 
 @app.route('/skladista')
 def skladista():
-	return render_template('skladista.html')
+	return render_template('skladista.html', page='skladista')
 
 @app.route('/editskladiste')
 def editskladiste():
