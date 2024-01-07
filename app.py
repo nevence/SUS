@@ -1,10 +1,22 @@
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template, url_for, request, redirect, session
+from werkzeug.security import generate_password_hash, check_password_hash
+import mysql.connector
+
+
+konekcija = mysql.connector.connect(
+ passwd="", # lozinka za bazu 
+ user="root", # korisničko ime
+ database="sus", # ime baze
+ port=3306, # port na kojem je mysql server
+ auth_plugin='mysql_native_password' # ako se koristi mysql 8.x 
+)
+kursor = konekcija.cursor(dictionary=True)
 
 app = Flask(__name__) #definisanje flaska
 
 @app.route('/')
-def index():#definisanje funkcije o ruti index
-	return render_template('base.html') #pristupanju fajla
+def index():
+	return render_template('base.html')
 
 @app.route('/login')
 def login():
@@ -12,15 +24,81 @@ def login():
 
 @app.route('/users')
 def users():
-	return render_template('users.html')
+	upit = "select * from user"
+	kursor.execute(upit)
+	users = kursor.fetchall()
+	return render_template('users.html', users=users)
 
-@app.route('/newuser')
+@app.route('/newuser', methods=["GET", "POST"])
 def newuser():
-	return render_template('newuser.html')
+	if request.method == "GET":
+		return render_template('newuser.html')
+	elif request.method == "POST":
+		forma = request.form 
+		hesovana_lozinka = generate_password_hash(forma["lozinka"])
+		vrednosti = (
+		forma["ime"],
+		forma["prezime"],
+		forma["emailNovi"],
+		hesovana_lozinka,
+		forma["rola"],
+		  )
+		upit = """ INSERT INTO 
+			user(ime,prezime,email,lozinka,rola)
+			VALUES (%s, %s, %s, %s, %s) 
+			"""
+		kursor.execute(upit, vrednosti)
+		konekcija.commit()
+		return redirect(url_for("users"))
 
-@app.route('/edituser')
-def edituser():
-	return render_template('edituser.html')
+
+
+
+
+
+@app.route('/edituser/<id>', methods=["GET", "POST"])
+def edituser(id):
+	if request.method == "GET":
+		upit = "SELECT * FROM user WHERE id=%s"
+		vrednost = (id,)
+		kursor.execute(upit, vrednost)
+		user = kursor.fetchone()
+		return render_template("edituser.html", user=user)
+
+	elif request.method == "POST":
+		forma = request.form 
+		hesovana_lozinka = generate_password_hash(forma["lozinka"])
+		vrednosti = (
+		forma["ime"],
+		forma["prezime"],
+		forma["emailNovi"],
+		hesovana_lozinka,
+		forma["rola"],
+		id,
+		  )
+		upit = """ UPDATE user SET
+            ime = %s,
+            prezime = %s,
+            email = %s,
+            lozinka = %s,
+            rola = %s
+            WHERE id = %s
+        """
+		kursor.execute(upit, vrednosti)
+		konekcija.commit()
+		return redirect(url_for("users"))
+
+@app.route('/deleteuser/<id>', methods=["POST"])
+def deleteuser(id):
+	upit = """
+	DELETE FROM user WHERE id=%s
+	"""
+	vrednost = (id,)
+	kursor.execute(upit, vrednost)
+	konekcija.commit()
+	return redirect(url_for("users"))
+
+	
 
 @app.route('/proizvodilager')
 def proizvodilager():

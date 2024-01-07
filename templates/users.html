@@ -1,46 +1,49 @@
-{% extends 'base.html' %}
-
-{% block content%}
+{% extends 'base.html' %} {% block content%}
 
 <div class="container">
+  <div class="row justify-content-end my-3">
+    <a class="btn btn-primary" href="{{ url_for('newuser') }}" role="button"
+      >Dodaj korisnika</a
+    >
+  </div>
 
-    <div class="row justify-content-end my-3">
-        <a class="btn btn-primary" href= {{ url_for('newuser') }} role="button">Dodaj korisnika</a>
-      </div>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Ime</th>
+        <th scope="col">Prezime</th>
+        <th scope="col">Email</th>
+        <th scope="col">Rola</th>
+        <th scope="col">Akcije</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <td>{{user.ime}}</td>
+        <td>{{user.prezime}}</td>
+        <td>{{user.email}}</td>
+        <td>{{user.rola}}</td>
+        <td class="d-inline-flex">
+          <a
+            class="icon-btn orange mb-2 ml-2"
+            href={{ url_for('edituser', id=user.id) }}
+            role="button"
+          >
+            <i class="form-inline fas fa-edit"></i>
+          </a>
 
-
-    <table class="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col">Ime</th>
-            <th scope="col">Prezime</th>
-            <th scope="col">Email</th>
-            <th scope="col">Akcije</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            
-            <td>Slavimir</td>
-            <td>Stosovic</td>
-            <td>slavimir.stosovic@vtsnis.edu.rs</td>
-            <td class="d-inline-flex">
-          
-                <a class="icon-btn orange mb-2 ml-2" href={{ url_for('edituser') }} role="button">
-                    <i class=" form-inline fas fa-edit"></i>
-                  </a>
-        
-                  <form action="">
-                    <button class="form-inline icon-btn red mb-2 ml-2">
-                      <i class="fas fa-trash-alt "></i>
-                    </button>
-                  </form>
-            </td>
-          </tr>
-
-          
-        </tbody>
-      </table>
+          <form action={{ url_for("deleteuser", id= user.id) 
+        }} method="POST">
+            <button class="form-inline icon-btn red mb-2 ml-2">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 
 {% endblock %}
