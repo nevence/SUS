@@ -9,24 +9,86 @@
     <h3>Izmena proizvoda</h3>
   </div>
 
-  <form>
+  <form
+    action="{{ url_for('editproizvod', id=proizvod.id) }}"
+    method="POST"
+    enctype="multipart/form-data"
+  >
     <div class="form-group">
       <label for="naziv">Naziv</label>
-      <input type="text" class="form-control" id="naziv" />
+      <input
+        type="text"
+        class="form-control"
+        id="naziv"
+        name="naziv"
+        value="{{proizvod.naziv}}"
+      />
     </div>
 
     <div class="form-group">
       <label for="kategorija">Kategorija</label>
-      <input type="text" class="form-control" id="kategorija" />
+      <input
+        type="text"
+        class="form-control"
+        id="kategorija"
+        name="kategorija"
+        value="{{proizvod.kategorija}}"
+      />
     </div>
 
     <div class="form-group">
       <label for="cena">Cena</label>
-      <input type="number" class="form-control" id="cena" />
+      <input
+        type="number"
+        class="form-control"
+        id="cena"
+        name="cena"
+        value="{{proizvod.cena}}"
+      />
     </div>
 
-    <a class="btn btn-primary" href="#" role="button">Sačuvaj</a>
+    <div class="form-group">
+      <label for="slika">
+        <img
+          {%if
+          proizvod.slika%}
+          src="/static/uploads/{{ proizvod.slika }}"
+          {%else%}
+          src="/static/placeholder.png"
+          {%endif%}
+          id="slika_pregled"
+        />
+      </label>
+      <label for="slika" class="btn btn-primary">Odaberi sliku</label>
+      <input
+        type="file"
+        accept="image/*"
+        class="custom-file-input"
+        hidden
+        id="slika"
+        name="slika"
+      />
+    </div>
+
+    <button type="submit" class="btn btn-primary" href="#" role="button">
+      Sačuvaj
+    </button>
   </form>
 </div>
+
+<script>
+  document.getElementById("slika").addEventListener("change", function (e) {
+    var reader = new FileReader();
+    const file = e.target.files[0];
+
+    reader.onload = function (e) {
+      document
+        .getElementById("slika_pregled")
+        .setAttribute("src", e.target.result);
+    };
+
+    reader.readAsDataURL(file);
+  });
+</script>
 
 {% endblock %}

@@ -111,3 +111,11 @@ h6 {
 .sortDiv {
   margin-bottom: 2rem;
 }
+
+#slika_pregled {
+  height: 50px;
+  width: 50px;
+  border-radius: 10px;
+  background-color: #999999;
+  object-fit: cover;
+}
