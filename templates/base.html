@@ -18,11 +18,11 @@
     <title>SUS - Sistem za upravljanje skladištem</title>
   </head>
   <body>
-    {% if page != 'login' and page != 'skladista' %}
+    {% if page != 'login' %}
     <!-- NAVBAR 1 -->
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
       <div class="container">
-        <a class="navbar-brand" href={{ url_for('skladista') }}>SUS</a>
+        <a class="navbar-brand" href="{{ url_for('skladista') }}">SUS</a>
         <button
           class="navbar-toggler"
           type="button"
@@ -36,8 +36,13 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ml-auto">
+            {% if current_user.is_authenticated %} {% if current_user.role ==
+            'Menadzer' or current_user.role == 'Zaposleni' %}
             <li class="nav-item">
-              <a id="skladiste-meni" class="nav-link" href={{ url_for('popunjenost') }}
+              <a
+                id="skladiste-meni"
+                class="nav-link"
+                href="{{ url_for('popunjenost') }}"
                 >Popunjenost</a
               >
             </li>
@@ -45,7 +50,7 @@
               <a
                 id="proizvodilager-meni"
                 class="nav-link"
-                href={{ url_for('proizvodilager') }}
+                href="{{ url_for('proizvodilager') }}"
                 >Proizvodi na lageru</a
               >
             </li>
@@ -53,30 +58,58 @@
               <a
                 id="opticajproizvoda-meni"
                 class="nav-link"
-                href={{ url_for('dostupniproizvodi') }}
+                href="{{ url_for('dostupniproizvodi') }}"
                 >Proizvodi u opticaju</a
               >
             </li>
+            {% endif %} {% if current_user.role == 'Administrator' %}
             <li class="nav-item">
-              <a id="skladiste-meni" class="nav-link" href={{ url_for('users') }}
+              <a
+                id="skladiste-meni"
+                class="nav-link"
+                href="{{ url_for('users') }}"
                 >Korisnici</a
               >
             </li>
+            {% endif %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('logout') }}">
+                <i class="fas fa-sign-out-alt"></i> Odjava
+              </a>
+            </li>
+            {% endif %}
           </ul>
         </div>
       </div>
-     </nav>
+    </nav>
     {% else %}
     <!-- NAVBAR 2 -->
-     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
       <div class="container justify-content-center">
         <a class="navbar-brand" href="#"
           >SUS - Sistem za upravljanje skladištem</a
         >
       </div>
-      </nav>
+    </nav>
     {% endif %}
+    <div class="container mt-4">
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div class="alert alert-{{ category }}" role="alert" id="flash-message">
+        {{ message }}
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
+    </div>
     {% block content %} {% endblock %}
+
+    <script>
+      setTimeout(function () {
+        var flashMessage = document.getElementById("flash-message");
+        if (flashMessage) {
+          flashMessage.remove();
+        }
+      }, 3000);
+    </script>
 
     <script type="text/javascript" src="/static/jquery-3.4.1.min.js"></script>
 

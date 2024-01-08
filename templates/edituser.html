@@ -29,11 +29,11 @@
     </div>
 
     <div class="form-group">
-      <label for="rola">Rola</label>
-      <select class="form-control" id="rola" name="rola">
-        <option value="Administrator" {% if user.rola == 'Administrator' %} selected {% endif %}>Administrator</option>
-        <option value="Zaposleni" {% if user.rola == 'Zaposleni' %} selected {% endif %}>Zaposleni</option>
-        <option value="Menadzer" {% if user.rola == 'Menadzer' %} selected {% endif %}>Menadžer</option>
+      <label for="role">Rola</label>
+      <select class="form-control" id="role" name="role">
+        <option value="Administrator" {% if user.role == 'Administrator' %} selected {% endif %}>Administrator</option>
+        <option value="Zaposleni" {% if user.role == 'Zaposleni' %} selected {% endif %}>Zaposleni</option>
+        <option value="Menadzer" {% if user.role == 'Menadzer' %} selected {% endif %}>Menadžer</option>
       </select>
     </div>
 
