@@ -6,7 +6,7 @@
 <!-- Glavni kontejner -->
 <div class="container">
     <div class="row justify-content-end my-3">
-        <a class="btn btn-primary" href= {{ url_for('newproizvod') }} role="button">Dodaj proizvod</a>
+        <a class="btn btn-primary" href= {{ url_for('newproizvod', sid=sid) }} role="button">Dodaj proizvod</a>
       </div>
   <div class="row">
     <!-- Drugi Idiv -->
@@ -51,10 +51,10 @@
                   />
                 </td>
                 <td class="align-middle text-center d-flex justify-content-center">
-                  <a class="icon-btn orange mb-2 ml-2" href={{ url_for('editproizvod', id=proizvod.id) }} role="button">
+                  <a class="icon-btn orange mb-2 ml-2" href={{ url_for('editproizvod', id=proizvod.id, sid=sid) }} role="button">
                     <i class="fas fa-edit"></i>
                   </a>
-                  <form action={{ url_for('deleteproizvod', id=proizvod.id)  }} method="POST">
+                  <form action={{ url_for('deleteproizvod', id=proizvod.id, sid=sid)  }} method="POST">
                     <button class="icon-btn red mb-2 ml-2">
                       <i class="fas fa-trash-alt "></i>
                     </button>

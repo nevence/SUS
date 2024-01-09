@@ -64,7 +64,7 @@ def load_user(user_id):
 
 @app.route('/')
 def index():
-	return render_template('base.html')
+	return redirect(url_for("login"))
 
 @app.route('/login', methods = ["GET", "POST"])
 def login():
@@ -130,6 +130,7 @@ def newuser():
 				"""
 			kursor.execute(upit, vrednosti)
 			konekcija.commit()
+			flash("Uspešno ste kreirali novog korisnika", "success")
 			return redirect(url_for("users"))
 	else:
 		flash("Niste ovlašćeni da pristupite stranici", 'danger')
@@ -169,6 +170,7 @@ def edituser(id):
 			"""
 			kursor.execute(upit, vrednosti)
 			konekcija.commit()
+			flash("Uspešno ste izmenili korisnika", "success")
 			return redirect(url_for("users"))
 	else:
 		flash("Niste ovlašćeni da pristupite stranici", 'danger')
@@ -185,27 +187,36 @@ def deleteuser(id):
 		vrednost = (id,)
 		kursor.execute(upit, vrednost)
 		konekcija.commit()
+		flash("Uspešno ste izbrisali korisnika!", "success")
 		return redirect(url_for("users"))
 	else:
 		flash("Niste ovlašćeni da pristupite stranici", 'danger')
 		return redirect(url_for('login'))
 	
 
-@app.route('/proizvodilager')
+@app.route('/proizvodilager/<sid>')
 @login_required
-def proizvodilager():
-	print(current_user.role)
-	proizvod = "PROIZVOD"
+def proizvodilager(sid):
 	if current_user.is_authenticated and (current_user.role == 'Zaposleni' or current_user.role == 'Menadzer'):
-		flash("Uspešno ste pristupili stranici proizvoda na lageru", 'success')
-		return render_template('proizvodilager.html', proizvod=proizvod)
+		if request.method == "GET":
+				upit = upit = """
+    						SELECT proizvod.*, skladisteproizvod.kolicina
+							FROM proizvod
+							INNER JOIN skladisteproizvod ON proizvod.id = skladisteproizvod.proizvod_id
+							WHERE skladisteproizvod.skladiste_id = %s
+						"""
+				vrednosti = (sid,)
+				kursor.execute(upit, vrednosti)
+				proizvod = kursor.fetchall()
+				print(proizvod)
+		return render_template('proizvodilager.html', proizvod=proizvod, sid=sid)
 	else:
 		flash("Niste ovlašćeni da pristupite stranici", 'danger')
 		return redirect(url_for('login'))
 
-@app.route('/editproizvod/<id>', methods=["GET", "POST"])
+@app.route('/editproizvod/<id>/<sid>', methods=["GET", "POST"])
 @login_required
-def editproizvod(id):
+def editproizvod(id, sid):
     if current_user.is_authenticated and current_user.role == 'Menadzer':
         if request.method == "GET":
             upit = "SELECT * FROM proizvod WHERE id=%s"
@@ -244,15 +255,15 @@ def editproizvod(id):
             kursor.execute(upit, vrednosti)
             konekcija.commit()
             flash('Uspešno ste izmenili proizvod!', 'success')
-            return redirect(url_for("dostupniproizvodi"))
+            return redirect(url_for("dostupniproizvodi", sid=sid))
     else:
         flash("Niste ovlašćeni da pristupite stranici", 'danger')
         return redirect(url_for("login"))
 	
 
-@app.route('/deleteproizvod/<id>', methods=["POST"])
+@app.route('/deleteproizvod/<id>/<sid>', methods=["POST"])
 @login_required
-def deleteproizvod(id):
+def deleteproizvod(id, sid):
 	if current_user.is_authenticated and current_user.role == 'Menadzer':
 		upit = """
 		DELETE FROM proizvod WHERE id=%s
@@ -261,13 +272,13 @@ def deleteproizvod(id):
 		kursor.execute(upit, vrednost)
 		konekcija.commit()
 		flash("Uspešno ste obrisali proizvod", "success")
-		return redirect(url_for("dostupniproizvodi"))
+		return redirect(url_for("dostupniproizvodi", sid=sid))
 	else:
 		flash("Niste ovlašćeni da pristupite stranici", 'danger')
 		return redirect(url_for('login'))
 
 
-@app.route('/newproizvod', methods=["GET", "POST"])
+@app.route('/newproizvod/<sid>', methods=["GET", "POST"])
 @login_required
 def newproizvod():
 	if current_user.is_authenticated and current_user.role == 'Menadzer':
@@ -294,53 +305,186 @@ def newproizvod():
 			kursor.execute(upit, vrednosti)
 			konekcija.commit()
 			flash('Uspešno kreiran proizvod!', 'success')
-			return redirect(url_for("dostupniproizvodi"))
+			return redirect(url_for("dostupniproizvodi", sid=sid))
 	else:
 		flash("Niste ovlašćeni da pristupite stranici", 'danger')
 		return redirect(url_for("login"))
 
-@app.route('/dostupniproizvodi', methods=["GET"])
+@app.route('/dostupniproizvodi/<sid>', methods=["GET"])
 @login_required
-def dostupniproizvodi():
+def dostupniproizvodi(sid):
 	if current_user.is_authenticated and (current_user.role == 'Zaposleni' or current_user.role == 'Menadzer'):
 		if request.method == "GET":
 				upit = "select * from proizvod"
 				kursor.execute(upit)
 				proizvod = kursor.fetchall()
-				return render_template('dostupniproizvodi.html', proizvod=proizvod)
+				return render_template('dostupniproizvodi.html', proizvod=proizvod, sid=sid)
 	else:
 		flash("Niste ovlašćeni da pristupite stranici", 'danger')
 		return redirect(url_for("login"))
 
-@app.route('/poruciproizvod')
+@app.route('/poruciproizvod/<sid>', methods=["GET", "POST"])
 @login_required
-def poruciproizvod():
-	return render_template('poruciproizvod.html')
+def poruciproizvod(sid):
+	if current_user.is_authenticated and (current_user.role == 'Menadzer' or current_user.role== 'Zaposleni'):
+		if request.method == "GET":
+			upit = "select * from proizvod"
+			kursor.execute(upit)
+			proizvod = kursor.fetchall()
+			return render_template('poruciproizvod.html', sid=sid, proizvod=proizvod)
+		elif request.method == "POST":
+			forma = request.form 
+			vrednosti = (
+			sid,
+			forma["proizvod"],
+			forma["kolicina"]
+			)
+
+			upit = """ SELECT * FROM skladisteproizvod WHERE skladiste_id=%s and proizvod_id=%s
+					"""
+			kursor.execute(upit, (sid, forma["proizvod"],))
+			rezultat = kursor.fetchone()
+
+			if rezultat == None:
+				upit = """ INSERT INTO 
+					skladisteproizvod(skladiste_id,proizvod_id,kolicina)
+					VALUES (%s, %s, %s) 
+					"""
+				kursor.execute(upit, vrednosti)
+				konekcija.commit()
+				flash("Uspešno ste stavili na lager nov proizvod", "success")
+				return redirect(url_for("proizvodilager", sid=sid))
+			else:
+				vrednosti = (
+					forma["kolicina"],
+					rezultat["id"],
+				)
+				upit = """ UPDATE skladiste SET
+				kolicina = %s
+				WHERE id = %s
+			"""
+				kursor.execute(upit, vrednosti)
+				konekcija.commit()
+				flash("Uspešno ste poručili novu količinu proizvoda", "success")
+
+	else:
+		flash("Niste ovlašćeni da pristupite stranici", 'danger')
+		return redirect(url_for("login"))
+
 
 @app.route('/isporuciproizvod')
 @login_required
 def isporuciproizvod():
 	return render_template('isporuciproizvod.html')
 
-@app.route('/skladista')
+@app.route('/skladista', methods=["GET", "POST"])
 @login_required
 def skladista():
-	return render_template('skladista.html', page='skladista')
+	if current_user.is_authenticated and (current_user.role == 'Zaposleni' or current_user.role == 'Menadzer'):
+		if request.method == "GET":
+				upit = "select * from skladiste"
+				kursor.execute(upit)
+				skladiste = kursor.fetchall()
+		return render_template('skladista.html', skladiste=skladiste)
+	else:
+		flash("Niste ovlašćeni da pristupite stranici", 'danger')
+		return redirect(url_for('login'))
 
-@app.route('/editskladiste')
+@app.route('/editskladiste/<sid>', methods=["GET", "POST"])
 @login_required
-def editskladiste():
-	return render_template('editskladiste.html')
+def editskladiste(sid):
+	if current_user.is_authenticated and current_user.role == 'Menadzer':
+		if request.method == "GET":
+			upit = "SELECT * FROM skladiste WHERE id=%s"
+			vrednost = (sid,)
+			kursor.execute(upit, vrednost)
+			skladiste = kursor.fetchone()
+			return render_template("editskladiste.html", skladiste=skladiste)
 
-@app.route('/newskladiste')
+		elif request.method == "POST":
+			forma = request.form 
+			vrednosti = (
+			forma["naziv"],
+			forma["adresa"],
+			forma["kapacitet"],
+			sid,
+			)
+			upit = """ UPDATE skladiste SET
+				naziv = %s,
+				adresa = %s,
+				kapacitet = %s
+				WHERE id = %s
+			"""
+			kursor.execute(upit, vrednosti)
+			konekcija.commit()
+			flash("Uspešno ste izmenili skladište", "success")
+			return redirect(url_for("skladista"))
+	else:
+		flash("Niste ovlašćeni da pristupite stranici", 'danger')
+		return redirect(url_for("login"))
+
+@app.route('/newskladiste', methods=["GET", "POST"])
 @login_required
 def newskladiste():
-	return render_template('newskladiste.html')
-
-@app.route('/popunjenost')
+	if current_user.is_authenticated and current_user.role == 'Menadzer':
+		if request.method == "GET":
+			return render_template('newskladiste.html')
+		elif request.method == "POST":
+			forma = request.form
+			vrednosti = (
+			forma["naziv"],
+			forma["adresa"],
+			forma["kapacitet"],
+			)
+			upit = """ INSERT INTO 
+				skladiste(naziv,adresa,kapacitet)
+				VALUES (%s, %s, %s) 
+				"""
+			kursor.execute(upit, vrednosti)
+			konekcija.commit()
+			flash('Uspešno kreirano skladište!', 'success')
+			return redirect(url_for("skladista"))
+	else:
+		flash("Niste ovlašćeni da pristupite stranici", 'danger')
+		return redirect(url_for("login"))
+	
+@app.route('/deleteskladiste/<sid>', methods=["POST"])
 @login_required
-def popunjenost():
-	return render_template('popunjenost.html')
+def deleteskladiste(sid):
+	if current_user.is_authenticated and current_user.role == 'Menadzer':
+		upit = """
+		DELETE FROM skladiste WHERE id=%s
+		"""
+		vrednost = (sid,)
+		kursor.execute(upit, vrednost)
+		konekcija.commit()
+		flash("Uspešno ste izbrisali skladište!", "success")
+		return redirect(url_for("skladista"))
+	else:
+		flash("Niste ovlašćeni da pristupite stranici", 'danger')
+		return redirect(url_for('login'))
+
+@app.route('/popunjenost/<sid>')
+@login_required
+def popunjenost(sid):
+	if current_user.is_authenticated and (current_user.role == 'Zaposleni' or current_user.role == 'Menadzer'):
+		if request.method == "GET":
+				upit = "select * from skladiste WHERE id=%s"
+				vrednosti = (sid,)
+				kursor.execute(upit, vrednosti)
+				skladiste = kursor.fetchone()
+				procenat = round(skladiste["popunjeno"] / skladiste["kapacitet"] * 100)
+				if procenat<76:
+					kategorija = "success"
+				elif procenat>75 and procenat<90:
+					kategorija = "warning"
+				else:
+					kategorija = "danger"
+		return render_template('popunjenost.html', skladiste=skladiste, sid=sid, procenat=procenat, kategorija=kategorija)
+	else:
+		flash("Niste ovlašćeni da pristupite stranici", 'danger')
+		return redirect(url_for('login'))
+
 
 app.run(debug =True) #pokretanje aplikacije
 

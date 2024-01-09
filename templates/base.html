@@ -37,12 +37,12 @@
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ml-auto">
             {% if current_user.is_authenticated %} {% if current_user.role ==
-            'Menadzer' or current_user.role == 'Zaposleni' %}
+            'Menadzer' or current_user.role == 'Zaposleni' %} {% if sid %}
             <li class="nav-item">
               <a
                 id="skladiste-meni"
                 class="nav-link"
-                href="{{ url_for('popunjenost') }}"
+                href="{{ url_for('popunjenost', sid=sid) }}"
                 >Popunjenost</a
               >
             </li>
@@ -50,7 +50,7 @@
               <a
                 id="proizvodilager-meni"
                 class="nav-link"
-                href="{{ url_for('proizvodilager') }}"
+                href="{{ url_for('proizvodilager', sid=sid) }}"
                 >Proizvodi na lageru</a
               >
             </li>
@@ -58,11 +58,12 @@
               <a
                 id="opticajproizvoda-meni"
                 class="nav-link"
-                href="{{ url_for('dostupniproizvodi') }}"
+                href="{{ url_for('dostupniproizvodi', sid=sid) }}"
                 >Proizvodi u opticaju</a
               >
             </li>
-            {% endif %} {% if current_user.role == 'Administrator' %}
+            {% endif %} {% endif %} {% if current_user.role == 'Administrator'
+            %}
             <li class="nav-item">
               <a
                 id="skladiste-meni"

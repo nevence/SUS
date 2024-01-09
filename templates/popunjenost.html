@@ -10,18 +10,20 @@
           class="naslov d-flex flex-column align-items-center justify-content-center"
         >
           <h2>Grafički prikaz popunjenosti kapaciteta skladišta:</h2>
-          <h4 id="naziv-skladista">Gigatron Niš</h4>
+          <h4 id="naziv-skladista">{{skladiste.naziv}}</h4>
         </div>
         <div class="parametri col-12">
           <div class="row justify-content-between">
             <div class="kapacitet d-flex col-4 justify-content-center">
-              <h5 id="kapacitet">Kapacitet: 4900</h5>
+              <h5 id="kapacitet">Kapacitet: {{skladiste.kapacitet}}</h5>
             </div>
             <div class="popunjeno d-flex col-4 justify-content-center">
-              <h5 id="popunjeno">Popunjeno: 1363</h5>
+              <h5 id="popunjeno">Popunjeno: {{skladiste.popunjeno}}</h5>
             </div>
             <div class="dostupno d-flex col-4 justify-content-center">
-              <h5 id="dostupno">Dostupno: 3537</h5>
+              <h5 id="dostupno">
+                Dostupno: {{skladiste.kapacitet-skladiste.popunjeno}}
+              </h5>
             </div>
           </div>
         </div>
@@ -31,21 +33,26 @@
         <div class="custom-progress-container">
           <div class="progress custom-progress-bar">
             <div
-              class="progress-bar bg-success"
+              class="progress-bar bg-{{ kategorija }}"
               role="progressbar"
-              style="width: 28%"
-              aria-valuenow="50"
+              style="width: 100%"
+              aria-valuenow="{{ procenat }}"
               aria-valuemin="0"
               aria-valuemax="100"
             ></div>
           </div>
         </div>
         <div class="procenat-popunjenosti d-flex justify-content-center">
-          <h2 class="" id="procenat-popunjenosti">28%</h2>
+          <h2 class="" id="procenat-popunjenosti">{{procenat}}%</h2>
         </div>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+  var progressBar = document.querySelector(".progress-bar");
+  progressBar.style.width = "{{ procenat }}%";
+</script>
 
 {% endblock %}

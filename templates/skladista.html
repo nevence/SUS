@@ -28,25 +28,27 @@
                 </tr>
             </thead>
             <tbody id="skladiste-telo">
+              {% for skladiste in skladiste %}
                 <tr>
-                    <td class="align-middle">1</td>
-                    <td class="align-middle">Gigatron Nis</td>
-                    <td class="align-middle">Knjaževačka 10</td>
-                    <td class="align-middle">10000</td>
+                    <td class="align-middle">{{skladiste.id}}</td>
+                    <td class="align-middle">{{skladiste.naziv}}</td>
+                    <td class="align-middle">{{skladiste.adresa}}</td>
+                    <td class="align-middle">{{skladiste.kapacitet}}</td>
                     <td class="align-middle text-center">
-                        <a class="btn btn-primary" href={{ url_for('users') }} role="button">Prikaži</a>
+                        <a class="btn btn-primary" href={{ url_for('popunjenost', sid=skladiste.id) }} role="button">Prikaži</a>
                     </td>
                     <td class="align-middle text-center">
-                        <a class="icon-btn orange" href={{ url_for('users') }} role="button">
+                        <a class="icon-btn orange" href={{ url_for('editskladiste', sid=skladiste.id) }} role="button">
                             <i class="fas fa-edit"></i>
                         </a>
-                        <form action="" class="d-inline">
+                        <form action={{ url_for('deleteskladiste', sid=skladiste.id) }} method="POST" class="d-inline">
                             <button class="icon-btn red" type="submit">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </form>
                     </td>
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
         

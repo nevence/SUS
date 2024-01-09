@@ -5,6 +5,9 @@
 
 <!-- Glavni kontejner -->
 <div class="container">
+  <div class="row justify-content-end my-3">
+    <a class="btn btn-primary" href= {{ url_for('poruciproizvod', sid=sid) }} role="button">Poruči proizvode</a>
+  </div>
   <div class="row">
     <!-- Drugi Idiv -->
     <div class="col-md-12">
@@ -29,12 +32,13 @@
               </tr>
             </thead>
             <tbody id="skladisteproizvod-telo">
+              {% for proizvod in proizvod %}
               <tr>
-                <td class="align-middle">1</td>
-                <td class="align-middle">Laptop</td>
-                <td class="align-middle">Elektronika</td>
-                <td class="align-middle">79900</td>
-                <td class="align-middle">15</td>
+                <td class="align-middle">{{proizvod.id}}</td>
+                <td class="align-middle">{{proizvod.naziv}}</td>
+                <td class="align-middle">{{proizvod.kategorija}}</td>
+                <td class="align-middle">{{proizvod.cena}}</td>
+                <td class="align-middle">{{proizvod.kolicina}}</td>
                 <td class="align-middle">
                   <img 
                     {% if proizvod.slika %}
@@ -49,14 +53,15 @@
                   />
                 </td>
                 <td class="align-middle d-flex justify-content-center">
-                  <a class="icon-btn mb-2 ml-2" href={{ url_for('poruciproizvod') }} role="button" style="color: #28a745;">
+                  <a class="icon-btn mb-2 ml-2" href={{ url_for('poruciproizvod', id=proizvod.id, sid=sid) }} role="button" style="color: #28a745;">
                     <i class="fas fa-shopping-cart"></i>
                   </a>
-                  <a class="icon-btn red mb-2 ml-2" href={{ url_for('isporuciproizvod') }} role="button">
+                  <a class="icon-btn red mb-2 ml-2" href={{ url_for('isporuciproizvod', id=proizvod.id, sid=sid) }} role="button">
                     <i class="fas fa-truck"></i>
                   </a>
                 </td>
               </tr>
+              {% endfor %}
             </tbody>
           </table>
         </div>

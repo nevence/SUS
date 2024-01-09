@@ -11,15 +11,20 @@
   <h3>Poruči proizvod</h3>
  </div>
 
-  <form>
+  <form action={{ url_for('poruciproizvod', sid=sid) }} method="POST">
 
   <div class="form-group">
     <label for="izaberi-proizvod">Izaberi proizvod</label>
                 <select
                   id="izaberi-proizvod"
                   class="form-control"
+                  name="proizvod"
                   required
-                ></select>
+                >
+                {% for proizvod in proizvod %}
+                <option value="{{proizvod.id}}" {% if id and id == proizvod.id %} selected {% endif %}>{{ proizvod.naziv }}</option>
+                {% endfor %}
+              </select>
   </div>
 
   
@@ -29,12 +34,13 @@
                   type="number"
                   class="form-control"
                   id="kolicina-proizvod"
+                  name="kolicina"
                   placeholder=""
                   required
                 />
   </div>
   
-  <a class="btn btn-primary" href='#' role="button">Poruči</a>
+  <button type="submit" class="btn btn-primary" href='#' role="button">Poruči</button>
 </form>
       
     </div>

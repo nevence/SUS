@@ -9,23 +9,23 @@
     <h3>Izmena skladišta</h3>
   </div>
 
-  <form>
+  <form action={{ url_for('editskladiste', sid=skladiste.id) }} method="POST">
     <div class="form-group">
       <label for="naziv">Naziv</label>
-      <input type="text" class="form-control" id="naziv" />
+      <input type="text" class="form-control" id="naziv" name="naziv" value="{{skladiste.naziv}}"/>
     </div>
 
     <div class="form-group">
-      <label for="kategorija">Adresa</label>
-      <input type="text" class="form-control" id="kategorija" />
+      <label for="adresa">Adresa</label>
+      <input type="text" class="form-control" id="adresa" name="adresa" value="{{skladiste.adresa}}" />
     </div>
 
     <div class="form-group">
-      <label for="cena">Kapacitet</label>
-      <input type="number" class="form-control" id="cena" />
+      <label for="kapacitet">Kapacitet</label>
+      <input type="number" class="form-control" id="kapacitet" name="kapacitet" value="{{skladiste.kapacitet}}"/>
     </div>
 
-    <a class="btn btn-primary" href="#" role="button">Sačuvaj</a>
+    <button type="submit" class="btn btn-primary" href="#" role="button">Sačuvaj</button>
   </form>
 </div>
 
