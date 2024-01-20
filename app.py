@@ -109,7 +109,7 @@ def users():
 	
 
 @app.route('/newuser', methods=["GET", "POST"])
-@login_required
+# @login_required
 def newuser():
 	if current_user.is_authenticated and current_user.role == 'Administrator':
 		if request.method == "GET":
@@ -223,7 +223,7 @@ def editproizvod(id, sid):
             vrednost = (id,)
             kursor.execute(upit, vrednost)
             proizvod = kursor.fetchone()
-            return render_template("editproizvod.html", proizvod=proizvod)
+            return render_template("editproizvod.html", proizvod=proizvod, sid=sid)
         elif request.method == "POST":
             forma = request.form
             naziv_slike = ""
@@ -280,10 +280,10 @@ def deleteproizvod(id, sid):
 
 @app.route('/newproizvod/<sid>', methods=["GET", "POST"])
 @login_required
-def newproizvod():
+def newproizvod(sid):
 	if current_user.is_authenticated and current_user.role == 'Menadzer':
 		if request.method == "GET":
-			return render_template('newproizvod.html')
+			return render_template('newproizvod.html', sid=sid)
 		elif request.method == "POST":
 			forma = request.form
 			naziv_slike = ""
@@ -313,7 +313,7 @@ def newproizvod():
 @app.route('/dostupniproizvodi/<sid>', methods=["GET"])
 @login_required
 def dostupniproizvodi(sid):
-	if current_user.is_authenticated and (current_user.role == 'Zaposleni' or current_user.role == 'Menadzer'):
+	if current_user.is_authenticated and (current_user.role == 'Menadzer'):
 		if request.method == "GET":
 				upit = "select * from proizvod"
 				kursor.execute(upit)
@@ -355,17 +355,20 @@ def poruciproizvod(sid):
 				flash("Uspešno ste stavili na lager nov proizvod", "success")
 				return redirect(url_for("proizvodilager", sid=sid))
 			else:
+				kolicina = int(forma["kolicina"]) + int(rezultat["kolicina"])
 				vrednosti = (
-					forma["kolicina"],
+					kolicina,
 					rezultat["id"],
 				)
-				upit = """ UPDATE skladiste SET
+				print(kolicina, rezultat["id"])
+				upit = """ UPDATE skladisteproizvod SET
 				kolicina = %s
 				WHERE id = %s
 			"""
 				kursor.execute(upit, vrednosti)
 				konekcija.commit()
 				flash("Uspešno ste poručili novu količinu proizvoda", "success")
+				return redirect(url_for("proizvodilager", sid=sid))
 
 	else:
 		flash("Niste ovlašćeni da pristupite stranici", 'danger')

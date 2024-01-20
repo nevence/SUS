@@ -2,7 +2,28 @@
 
 <!-- Navbar -->
 
-
+<script>
+ $(document).ready(function() {
+  console.log('Document is ready.'); // Dodajte ovu liniju
+  var table = $('#skladisteproizvod-tabela').DataTable({
+    language: {
+      url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/sr-SP.json',
+    },
+    buttons: [
+      'selectAll',
+      'selectNone',
+      'copy',
+      'csv',
+      'excel',
+      'pdf'
+    ],
+    select: true,
+    columnDefs: [
+      { "orderable": false, "targets": [4, 5] }
+    ],
+  });
+});
+  </script>
 <!-- Glavni kontejner -->
 <div class="container">
   <div class="row justify-content-end my-3">
@@ -70,4 +91,5 @@
     </div>
   </div>
 </div>
+
 {% endblock %}

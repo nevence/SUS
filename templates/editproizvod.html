@@ -10,7 +10,7 @@
   </div>
 
   <form
-    action="{{ url_for('editproizvod', id=proizvod.id) }}"
+    action="{{ url_for('editproizvod', id=proizvod.id, sid=sid) }}"
     method="POST"
     enctype="multipart/form-data"
   >

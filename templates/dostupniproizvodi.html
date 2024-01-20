@@ -72,4 +72,20 @@
     </div>
   </div>
 </div>
+<script>
+$(document).ready(function() {
+  console.log('Document is ready.'); // Dodajte ovu liniju
+  var table = $('#skladisteproizvod-tabela').DataTable({
+    language: {
+      url: '//cdn.datatables.net/plug-ins/1.13.7/i18n/sr-SP.json',
+    },
+    dom: 'Blfrtip',
+    buttons: [ 'copy', 'csv', 'excel' ],
+    columnDefs: [
+      { "orderable": false, "targets": [4, 5] }
+    ],
+  });
+});
+</script>
+
 {% endblock %}
