@@ -24,7 +24,11 @@
                     <th class="align-middle">Adresa</th>
                     <th class="align-middle">Kapacitet</th>
                     <th class="align-middle">Prikaži</th>
+                    {% if current_user.is_authenticated %}
+                    {% if current_user.role == 'Menadzer' %}
                     <th class="align-middle">Akcije</th>
+                    {% endif %}
+                    {% endif %} 
                 </tr>
             </thead>
             <tbody id="skladiste-telo">
@@ -37,14 +41,20 @@
                     <td class="align-middle text-center">
                         <a class="btn btn-primary" href={{ url_for('popunjenost', sid=skladiste.id) }} role="button">Prikaži</a>
                     </td>
+                    {% if current_user.is_authenticated %}
+                    {% if current_user.role == 'Menadzer' %}
                     <td class="align-middle text-center">
+                      
                         <a class="icon-btn orange" href={{ url_for('editskladiste', sid=skladiste.id) }} role="button">
                             <i class="fas fa-edit"></i>
                         </a>
+                   
                         <button class="icon-btn red mb-2 ml-2" data-toggle="modal", data-target="#deleteModal{{skladiste.id}}">
                           <i class="fas fa-trash-alt"></i>
                         </button>
                     </td>
+                    {% endif %}
+                    {% endif %} 
                 </tr>
                   <!-- Modal -->
 <div class="modal fade" id="deleteModal{{skladiste.id}}" tabindex="-1" aria-hidden="true">
@@ -316,9 +326,9 @@
     }
 },
       buttons: [ 'copy', 'csv', 'excel', 'pdf' ],
-      columnDefs: [
-        { "orderable": false, "targets": [4, 5] }
-      ],
+      // columnDefs: [
+      //   { "orderable": false, "targets": [4] }
+      // ],
     });
     table.buttons().container()
           .appendTo( '#skladiste-tabela_wrapper .col-md-6:eq(0)' );
