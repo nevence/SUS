@@ -11,20 +11,20 @@
   <h3>Poruči proizvod</h3>
  </div>
 
-  <form action={{ url_for('poruciproizvod', sid=sid) }} method="POST">
+  <form action={{ url_for('poruciproizvod', sid=sid, id=id) }} method="POST">
 
   <div class="form-group">
     <label for="izaberi-proizvod">Izaberi proizvod</label>
-                <select
-                  id="izaberi-proizvod"
-                  class="form-control"
-                  name="proizvod"
-                  required
-                >
-                {% for proizvod in proizvod %}
-                <option value="{{proizvod.id}}" {% if id and id == proizvod.id %} selected {% endif %}>{{ proizvod.naziv }}</option>
-                {% endfor %}
-              </select>
+    <select
+    id="izaberi-proizvod"
+    class="form-control"
+    name="proizvod"
+    required
+  >
+    {% for proizvod in proizvod %}
+      <option value="{{ proizvod.id }}" {% if proizvod.id == id|int %} selected {% endif %}>{{ proizvod.naziv }}</option>
+    {% endfor %}
+  </select>
   </div>
 
   

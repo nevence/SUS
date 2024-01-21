@@ -203,7 +203,7 @@ def proizvodilager(sid):
     						SELECT proizvod.*, skladisteproizvod.kolicina
 							FROM proizvod
 							INNER JOIN skladisteproizvod ON proizvod.id = skladisteproizvod.proizvod_id
-							WHERE skladisteproizvod.skladiste_id = %s
+							WHERE skladisteproizvod.skladiste_id = %s AND skladisteproizvod.kolicina  > 0;
 						"""
 				vrednosti = (sid,)
 				kursor.execute(upit, vrednosti)
@@ -323,15 +323,87 @@ def dostupniproizvodi(sid):
 		flash("Niste ovlašćeni da pristupite stranici", 'danger')
 		return redirect(url_for("login"))
 
-@app.route('/poruciproizvod/<sid>', methods=["GET", "POST"])
+@app.route('/poruciproizvod/<sid>/<id>', methods=["GET", "POST"])
 @login_required
-def poruciproizvod(sid):
+def poruciproizvod(sid, id):
 	if current_user.is_authenticated and (current_user.role == 'Menadzer' or current_user.role== 'Zaposleni'):
 		if request.method == "GET":
 			upit = "select * from proizvod"
 			kursor.execute(upit)
 			proizvod = kursor.fetchall()
-			return render_template('poruciproizvod.html', sid=sid, proizvod=proizvod)
+			print(proizvod, sid, id)
+			return render_template('poruciproizvod.html', sid=sid, id=id, proizvod=proizvod)
+		elif request.method == "POST":
+			forma = request.form 
+			vrednosti = (
+			sid,
+			forma["proizvod"],
+			forma["kolicina"]
+			)
+
+			upit = """ SELECT skladisteproizvod.*, skladiste.popunjeno, skladiste.kapacitet 
+			FROM skladisteproizvod
+			INNER JOIN skladiste ON skladisteproizvod.skladiste_id = skladiste.id 
+			WHERE skladiste_id=%s and proizvod_id=%s
+					"""
+			kursor.execute(upit, (sid, forma["proizvod"],))
+			rezultat = kursor.fetchone()
+
+			upit = """ SELECT * FROM skladiste where id = %s
+					"""
+			kursor.execute(upit, (sid,))
+			rezultat2 = kursor.fetchone()
+
+
+			dostupno = int(rezultat2['kapacitet']) - int(rezultat2['popunjeno'])
+			if rezultat == None:
+				if (int(forma['kolicina']) > dostupno) or (int(forma["kolicina"]) < 0):
+					flash("Nepravilan unos količine", "danger")
+					return redirect(url_for("proizvodilager", sid=sid))
+				else:
+					upit = """ INSERT INTO 
+						skladisteproizvod(skladiste_id,proizvod_id,kolicina)
+						VALUES (%s, %s, %s) 
+						"""
+					kursor.execute(upit, vrednosti)
+					konekcija.commit()
+					flash("Uspešno ste stavili na lager nov proizvod", "success")
+					return redirect(url_for("proizvodilager", sid=sid))
+			else:
+				kolicina = int(forma["kolicina"]) + int(rezultat["kolicina"])
+				if kolicina > dostupno or kolicina <0:
+					flash("Nepravilan unos količine", "danger")
+					return redirect(url_for("proizvodilager", sid=sid))
+				else:
+					vrednosti = (
+						kolicina,
+						rezultat["id"],
+					)
+					print(kolicina, rezultat["id"])
+					upit = """ UPDATE skladisteproizvod SET
+					kolicina = %s
+					WHERE id = %s
+				"""
+					kursor.execute(upit, vrednosti)
+					konekcija.commit()
+					flash("Uspešno ste poručili novu količinu proizvoda", "success")
+					return redirect(url_for("proizvodilager", sid=sid))
+
+	else:
+		flash("Niste ovlašćeni da pristupite stranici", 'danger')
+		return redirect(url_for("login"))
+
+
+@app.route('/isporuciproizvod/<sid>/<id>', methods=['GET', 'POST'])
+@login_required
+def isporuciproizvod(sid, id):
+	if current_user.is_authenticated and (current_user.role == 'Menadzer' or current_user.role== 'Zaposleni'):
+		if request.method == "GET":
+			upit = "select * from proizvod"
+			kursor.execute(upit)
+			proizvod = kursor.fetchall()
+			print(proizvod, sid, id)
+			return render_template('isporuciproizvod.html', sid=sid, id=id, proizvod=proizvod)
 		elif request.method == "POST":
 			forma = request.form 
 			vrednosti = (
@@ -346,39 +418,31 @@ def poruciproizvod(sid):
 			rezultat = kursor.fetchone()
 
 			if rezultat == None:
-				upit = """ INSERT INTO 
-					skladisteproizvod(skladiste_id,proizvod_id,kolicina)
-					VALUES (%s, %s, %s) 
-					"""
-				kursor.execute(upit, vrednosti)
-				konekcija.commit()
-				flash("Uspešno ste stavili na lager nov proizvod", "success")
+				flash("Došlo je do greške...", "danger")
 				return redirect(url_for("proizvodilager", sid=sid))
 			else:
-				kolicina = int(forma["kolicina"]) + int(rezultat["kolicina"])
-				vrednosti = (
-					kolicina,
-					rezultat["id"],
-				)
-				print(kolicina, rezultat["id"])
-				upit = """ UPDATE skladisteproizvod SET
-				kolicina = %s
-				WHERE id = %s
-			"""
-				kursor.execute(upit, vrednosti)
-				konekcija.commit()
-				flash("Uspešno ste poručili novu količinu proizvoda", "success")
-				return redirect(url_for("proizvodilager", sid=sid))
+				if (int(rezultat["kolicina"]) < int(forma['kolicina'])) or int(forma['kolicina']) < 0:
+					flash("Nepravilan unos količine", "danger")
+					return redirect(url_for("proizvodilager", sid=sid))
+				else: 
+					kolicina = int(rezultat["kolicina"]) - int(forma['kolicina'])
+					vrednosti = (
+						kolicina,
+						rezultat["id"],
+					)
+					print(kolicina, rezultat["id"])
+					upit = """ UPDATE skladisteproizvod SET
+					kolicina = %s
+					WHERE id = %s
+				"""
+					kursor.execute(upit, vrednosti)
+					konekcija.commit()
+					flash("Uspešno ste isporučili navedenu količinu proizvoda", "success")
+					return redirect(url_for("proizvodilager", sid=sid))
 
 	else:
 		flash("Niste ovlašćeni da pristupite stranici", 'danger')
 		return redirect(url_for("login"))
-
-
-@app.route('/isporuciproizvod')
-@login_required
-def isporuciproizvod():
-	return render_template('isporuciproizvod.html')
 
 @app.route('/skladista', methods=["GET", "POST"])
 @login_required
