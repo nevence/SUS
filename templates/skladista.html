@@ -2,9 +2,11 @@
 
 <!-- Glavni kontejner -->
 <div class="container">
+    {% if current_user.role == 'Menadzer' %}
     <div class="row justify-content-end my-3">
         <a class="btn btn-primary" href= {{ url_for('newskladiste') }} role="button">Dodaj skladište</a>
       </div>
+      {% endif %}
   <div class="row justify-content-center">
     <!-- Drugi Idiv -->
     <div class="col-md-12">
@@ -23,10 +25,11 @@
                     <th class="align-middle">Naziv</th>
                     <th class="align-middle">Adresa</th>
                     <th class="align-middle">Kapacitet</th>
-                    <th class="align-middle">Prikaži</th>
+                    <th class="align-middle">Popunjeno</th>
+                    <th class="align-middle no-export">Prikaži</th>
                     {% if current_user.is_authenticated %}
                     {% if current_user.role == 'Menadzer' %}
-                    <th class="align-middle">Akcije</th>
+                    <th class="align-middle no-export">Akcije</th>
                     {% endif %}
                     {% endif %} 
                 </tr>
@@ -38,6 +41,7 @@
                     <td class="align-middle">{{skladiste.naziv}}</td>
                     <td class="align-middle">{{skladiste.adresa}}</td>
                     <td class="align-middle">{{skladiste.kapacitet}}</td>
+                    <td class="align-middle">{{skladiste.popunjeno}}</td>
                     <td class="align-middle text-center">
                         <a class="btn btn-primary" href={{ url_for('popunjenost', sid=skladiste.id) }} role="button">Prikaži</a>
                     </td>
@@ -325,10 +329,31 @@
         "renameTitle": "Preimenuj stanje"
     }
 },
-      buttons: [ 'copy', 'csv', 'excel', 'pdf' ],
-      // columnDefs: [
-      //   { "orderable": false, "targets": [4] }
-      // ],
+        buttons: [
+      {
+        extend: 'copy',
+        exportOptions: {
+          columns: ':not(.no-export)'
+        }
+      },
+      {
+        extend: 'csv',
+        exportOptions: {
+          columns: ':not(.no-export)'
+        }
+      },
+      {
+        extend: 'excel',
+        exportOptions: {
+          columns: ':not(.no-export)'
+        }
+      },
+      {
+        extend: 'pdf',
+        exportOptions: {
+          columns: ':not(.no-export)'
+        }
+      }],
     });
     table.buttons().container()
           .appendTo( '#skladiste-tabela_wrapper .col-md-6:eq(0)' );

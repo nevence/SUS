@@ -26,8 +26,8 @@
                 <th>Kategorija</th>
                 <th>Cena</th>
                 <th>Količina</th>
-                <th>Slika</th>
-                <th>Akcije</th>
+                <th class="no-export">Slika</th>
+                <th class="no-export">Akcije</th>
               </tr>
             </thead>
             <tbody id="skladisteproizvod-telo">
@@ -38,7 +38,7 @@
                 <td class="align-middle">{{proizvod.kategorija}}</td>
                 <td class="align-middle">{{proizvod.cena}}</td>
                 <td class="align-middle">{{proizvod.kolicina}}</td>
-                <td class="align-middle">
+                <td class="align-middle no-export">
                   <img 
                     {% if proizvod.slika %}
                       src="/static/uploads/{{ proizvod.slika }}"
@@ -51,7 +51,7 @@
                     class="img-fluid"
                   />
                 </td>
-                <td class="align-middle d-flex justify-content-center">
+                <td class="align-middle d-flex justify-content-center no-export">
                   <a class="icon-btn mb-2 ml-2" href={{ url_for('poruciproizvod', sid=sid,  id=proizvod.id,) }} role="button" style="color: #28a745;">
                     <i class="fas fa-shopping-cart"></i>
                   </a>
@@ -311,7 +311,34 @@
         "renameTitle": "Preimenuj stanje"
     }
 },
-      buttons: [ 'copy', 'csv', 'excel', 'pdf' ],
+        buttons: [
+      {
+        extend: 'copy',
+        exportOptions: {
+          columns: ':not(.no-export)'
+        }
+      },
+      {
+        extend: 'csv',
+        exportOptions: {
+          columns: ':not(.no-export)'
+        }
+      },
+      {
+        extend: 'excel',
+        exportOptions: {
+          columns: ':not(.no-export)'
+        }
+      },
+      {
+        extend: 'pdf',
+        exportOptions: {
+          columns: ':not(.no-export)'
+        }
+      }],
+      columnDefs: [
+        { "orderable": false, "targets": [4, 5] }
+      ],
       // columnDefs: [
       //   { "orderable": false, "targets": [4, 5] }
       // ],

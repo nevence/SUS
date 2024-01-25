@@ -13,7 +13,7 @@
         <th scope="col">Prezime</th>
         <th scope="col">Email</th>
         <th scope="col">Rola</th>
-        <th scope="col">Akcije</th>
+        <th class="no-export" scope="col">Akcije</th>
       </tr>
     </thead>
     <tbody>
@@ -299,7 +299,34 @@
         "renameTitle": "Preimenuj stanje"
     }
 },
-      buttons: [ 'copy', 'csv', 'excel', 'pdf' ],
+        buttons: [
+      {
+        extend: 'copy',
+        exportOptions: {
+          columns: ':not(.no-export)'
+        }
+      },
+      {
+        extend: 'csv',
+        exportOptions: {
+          columns: ':not(.no-export)'
+        }
+      },
+      {
+        extend: 'excel',
+        exportOptions: {
+          columns: ':not(.no-export)'
+        }
+      },
+      {
+        extend: 'pdf',
+        exportOptions: {
+          columns: ':not(.no-export)'
+        }
+      }],
+      columnDefs: [
+        { "orderable": false, "targets": [4, 5] }
+      ],
       columnDefs: [
         { "orderable": false, "targets": [4] }
       ],

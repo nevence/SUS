@@ -1,7 +1,8 @@
-import os
+import os, re
 from flask import Flask, render_template, url_for, request, redirect, flash
 from flask_security import login_required
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from flask_login import LoginManager, UserMixin, login_user, current_user, logout_user
 import mysql.connector
 
@@ -235,7 +236,7 @@ def editproizvod(id, sid):
 
                 file = request.files["slika"]
                 if file.filename:
-                    naziv_slike = forma["naziv"] + file.filename 
+                    naziv_slike = re.sub(r'[^\w.-]', '', forma["naziv"]) + secure_filename(file.filename)
                     file.save(os.path.join(app.config["UPLOAD_FOLDER"], naziv_slike))
 
             vrednosti = (
@@ -290,8 +291,9 @@ def newproizvod(sid):
 			if "slika" in request.files:
 				file = request.files["slika"]
 				if file.filename:
-					naziv_slike = forma["naziv"] + file.filename 
-					file.save(os.path.join(app.config["UPLOAD_FOLDER"], naziv_slike))
+					naziv_slike = re.sub(r'[^\w.-]', '', forma["naziv"]) + secure_filename(file.filename)
+					os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+					file.save(os.path.join(UPLOAD_FOLDER, naziv_slike))
 			vrednosti = (
 			forma["naziv"],
 			forma["kategorija"],

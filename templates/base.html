@@ -13,9 +13,20 @@
       href="{{ url_for('static', filename='fontawesome-free-5.12.0-web/css/all.min.css') }}"
     />
 
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
 
-    <link href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap4.min.css" rel="stylesheet">
+    <link
+      href="https://cdn.datatables.net/1.13.8/css/dataTables.bootstrap4.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css"
+    />
 
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="/static/bootstrap-4.4.1-dist/js/bootstrap.min.js"></script>
@@ -33,49 +44,65 @@
     <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.print.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.0.1/js/buttons.colVis.min.js"></script>
-    
+
     <script src="//cdn.datatables.net/plug-ins/1.13.7/i18n/sr-SP.json"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
 
     <title>SUS - Sistem za upravljanje skladištem</title>
   </head>
   <body>
-
     {% if page != 'login' %}
     <!-- NAVBAR 1 -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4"> 
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
       <div class="container">
         <a class="navbar-brand" href="{{ url_for('skladista') }}">SUS</a>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ml-auto">
-            {% if current_user.is_authenticated %}
-              {% if current_user.role == 'Menadzer' or current_user.role == 'Zaposleni' %}
-                {% if sid %}
-                  <li class="nav-item">
-                    <a id="skladiste-meni" class="nav-link" href="{{ url_for('popunjenost', sid=sid) }}">Popunjenost</a>
-                  </li>
-                  <li class="nav-item">
-                    <a id="proizvodilager-meni" class="nav-link" href="{{ url_for('proizvodilager', sid=sid) }}">Proizvodi na lageru</a>
-                  </li>
-                {% endif %}
-              {% endif %}
-              {% if current_user.role == 'Menadzer' %}
-                {% if sid %}
-                  <li class="nav-item">
-                    <a id="opticajproizvoda-meni" class="nav-link" href="{{ url_for('dostupniproizvodi', sid=sid) }}">Proizvodi u opticaju</a>
-                  </li>
-                {% endif %}
-              {% endif %}
-              {% if current_user.role == 'Administrator' %}
-                <li class="nav-item">
-                  <a id="skladiste-meni" class="nav-link" href="{{ url_for('users') }}">Korisnici</a>
-                </li>
-              {% endif %}
-              <li class="nav-item">
-                <a class="nav-link" href="{{ url_for('logout') }}">
-                  <i class="fas fa-sign-out-alt"></i> Odjava
-                </a>
-              </li>
+            {% if current_user.is_authenticated %} {% if current_user.role ==
+            'Menadzer' or current_user.role == 'Zaposleni' %} {% if sid %}
+            <li class="nav-item">
+              <a
+                id="skladiste-meni"
+                class="nav-link"
+                href="{{ url_for('popunjenost', sid=sid) }}"
+                >Popunjenost</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                id="proizvodilager-meni"
+                class="nav-link"
+                href="{{ url_for('proizvodilager', sid=sid) }}"
+                >Proizvodi na lageru</a
+              >
+            </li>
+            {% endif %} {% endif %} {% if current_user.role == 'Menadzer' %} {%
+            if sid %}
+            <li class="nav-item">
+              <a
+                id="opticajproizvoda-meni"
+                class="nav-link"
+                href="{{ url_for('dostupniproizvodi', sid=sid) }}"
+                >Proizvodi u opticaju</a
+              >
+            </li>
+            {% endif %} {% endif %} {% if current_user.role == 'Administrator'
+            %}
+            <li class="nav-item">
+              <a
+                id="skladiste-meni"
+                class="nav-link"
+                href="{{ url_for('users') }}"
+                >Korisnici</a
+              >
+            </li>
+            {% endif %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('logout') }}">
+                <i class="fas fa-sign-out-alt"></i> Odjava
+              </a>
+            </li>
             {% endif %}
           </ul>
         </div>
@@ -85,20 +112,19 @@
     <!-- NAVBAR 2 -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
       <div class="container justify-content-center">
-        <a class="navbar-brand" href="#">SUS - Sistem za upravljanje skladištem</a>
+        <a class="navbar-brand" href="#"
+          >SUS - Sistem za upravljanje skladištem</a
+        >
       </div>
     </nav>
     {% endif %}
     <div class="container mt-4">
-      {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-          {% for category, message in messages %}
-            <div class="alert alert-{{ category }}" role="alert" id="flash-message">
-              {{ message }}
-            </div>
-          {% endfor %}
-        {% endif %}
-      {% endwith %}
+      {% with messages = get_flashed_messages(with_categories=true) %} {% if
+      messages %} {% for category, message in messages %}
+      <div class="alert alert-{{ category }}" role="alert" id="flash-message">
+        {{ message }}
+      </div>
+      {% endfor %} {% endif %} {% endwith %}
     </div>
     {% block content %} {% endblock %}
 
@@ -110,8 +136,5 @@
         }
       }, 3000);
     </script>
-
-
-
   </body>
 </html>
