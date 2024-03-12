@@ -12,6 +12,6 @@ Additional Features
 - Confirmation Modals: Modal dialogs prompt for confirmation before deleting records.
 - Data Management: Tables support data search, column sorting, pagination, and data export to PDF, CSV, Excel formats, and copying to the clipboard.
 ## Technologies Used
-Python Flask/Jinja: Backend web framework for developing the application.
-HTML/CSS/JavaScript: Frontend technologies for user interface development.
-MySQL: Supported database options for data storage.
+- Python Flask/Jinja: Backend web framework for developing the application.
+- HTML/CSS/JavaScript: Frontend technologies for user interface development.
+- MySQL: Supported database options for data storage.
